@@ -14,10 +14,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cions/genpass/wordlists"
+	"github.com/cions/genpass/internal/runeset"
+	"github.com/cions/genpass/internal/wordlists"
 	"github.com/cions/go-colorterm"
 	"github.com/cions/go-options"
-	"github.com/cions/go-runeset"
 )
 
 var NAME = "genpass"
@@ -56,7 +56,7 @@ Syntax of CSET:
         \l              ASCII lowercase letters
         \L              ASCII uppercase letters
         \w              ASCII alphanumerics
-        \&              ASCII punctuations
+        \s              ASCII punctuations
         \g              AScII graphical characters
         \pN             Unicode character class (one-letter General Category)
         \p{NAME}        Unicode character class (General Category or Scripts)

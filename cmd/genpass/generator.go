@@ -11,7 +11,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/cions/go-runeset"
+	"github.com/cions/genpass/internal/runeset"
 )
 
 type Generator func() string
