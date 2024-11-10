@@ -10,7 +10,7 @@ Generates secure random passphrases/password/hex/base64 strings.
 
 ## Usage
 
-```sh
+```
 $ genpass --help
 Usage: genpass [-e] [-c N] [-w WORDLIST | -p | -x | -u] [-b BITS | -l N]
 
