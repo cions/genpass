@@ -16,7 +16,7 @@ import (
 
 type Generator func() string
 
-func choice[S ~[]E, E comparable](slice S) E {
+func choice[S ~[]E, E any](slice S) E {
 	n := big.NewInt(int64(len(slice)))
 	i, err := rand.Int(rand.Reader, n)
 	if err != nil {
