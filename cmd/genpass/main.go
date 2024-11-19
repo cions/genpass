@@ -37,7 +37,7 @@ Options:
                         Generate passphrases using the specified wordlist
                         (default: eff-large)
   -p, --password        Generate passwords using ASCII graphical characters
-      --password-with=CSET
+  -P, --password-with=CSET
                         Generate passwords using characters specified by CSET
   -x, --hex             Generate hexadecimal strings
   -u, --base64          Generate base64url strings
@@ -95,7 +95,7 @@ func (c *Command) Kind(name string) options.Kind {
 		return options.Required
 	case "-p", "--password":
 		return options.Boolean
-	case "--password-with":
+	case "-P", "--password-with":
 		return options.Required
 	case "-x", "--hex":
 		return options.Boolean
@@ -152,7 +152,7 @@ func (c *Command) Option(name string, value string, hasValue bool) error {
 			return errors.New("must contain at least 2 characters")
 		}
 		c.Picker = picker
-	case "--password-with":
+	case "-P", "--password-with":
 		c.Variant = Password
 		set, err := runeset.Parse(value)
 		if err != nil {
@@ -299,6 +299,9 @@ func run(args []string) error {
 func main() {
 	if err := run(os.Args[1:]); err != nil {
 		fmt.Fprintf(os.Stderr, "%v: error: %v\n", NAME, err)
+		if errors.Is(err, options.ErrCmdline) {
+			os.Exit(2)
+		}
 		os.Exit(1)
 	}
 }

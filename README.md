@@ -27,7 +27,7 @@ Options:
                         Generate passphrases using the specified wordlist
                         (default: eff-large)
   -p, --password        Generate passwords using ASCII graphical characters
-      --password-with=CSET
+  -P, --password-with=CSET
                         Generate passwords using characters specified by CSET
   -x, --hex             Generate hexadecimal strings
   -u, --base64          Generate base64url strings
