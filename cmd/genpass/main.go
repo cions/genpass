@@ -57,7 +57,7 @@ Syntax of CSET:
         \L              ASCII uppercase letters
         \w              ASCII alphanumerics
         \s              ASCII punctuations
-        \g              AScII graphical characters
+        \g              ASCII graphical characters
         \pN             Unicode character class (one-letter General Category)
         \p{NAME}        Unicode character class (General Category or Scripts)
 `
