@@ -1,4 +1,4 @@
-// Copyright (c) 2024 cions
+// Copyright (c) 2024-2025 cions
 // Licensed under the MIT License. See LICENSE for details.
 
 package runeset
@@ -144,23 +144,24 @@ func Parse(s string) (RuneSet, error) {
 			s = s[size:]
 			continue
 		}
-		r, size, err := decodeChar(s)
+
+		lo, losize, err := decodeChar(s)
 		if err != nil {
 			return RuneSet{}, err
 		}
-		if len(s) > size && s[size] == '-' {
-			end, endsize, err := decodeChar(s[size+1:])
+		if len(s) > losize && s[losize] == '-' {
+			hi, hisize, err := decodeChar(s[losize+1:])
 			if err == nil {
-				if r > end {
-					return RuneSet{}, fmt.Errorf("bad character range: %s", s[:size+endsize+1])
+				if lo > hi {
+					return RuneSet{}, fmt.Errorf("bad character range: %s", s[:losize+hisize+1])
 				}
-				set.AddRange(r, end)
-				s = s[size+endsize+1:]
+				set.AddRange(lo, hi)
+				s = s[losize+hisize+1:]
 				continue
 			}
 		}
-		set.Add(r)
-		s = s[size:]
+		set.Add(lo)
+		s = s[losize:]
 	}
 
 	set.MergeAdjacents()

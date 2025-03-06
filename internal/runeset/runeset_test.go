@@ -1,23 +1,24 @@
-// Copyright (c) 2024 cions
+// Copyright (c) 2024-2025 cions
 // Licensed under the MIT License. See LICENSE for details.
 
-package runeset
+package runeset_test
 
 import (
 	"fmt"
 	"strings"
 	"testing"
 	"unicode"
+
+	"github.com/cions/genpass/internal/runeset"
 )
 
-func assertEqual(t *testing.T, set RuneSet, want string, a ...any) {
+func assertEqual(t *testing.T, set runeset.RuneSet, want string, a ...any) {
 	t.Helper()
 
 	if got := set.String(); got != want {
 		var prefix string
-		if len(a) == 0 {
-		} else if format, ok := a[0].(string); ok {
-			prefix = fmt.Sprintf(format, a[1:]...) + ": "
+		if len(a) != 0 {
+			prefix = fmt.Sprintf(a[0].(string), a[1:]...) + ": "
 		}
 		t.Errorf("%vexpected %v, but got %v", prefix, want, got)
 	}
@@ -38,7 +39,7 @@ func TestRuneSet_Add(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		var set RuneSet
+		var set runeset.RuneSet
 		set.AddRange('c', 'e')
 		set.Add(tt.char)
 		assertEqual(t, set, tt.want, "Add(%q)", tt.char)
@@ -47,13 +48,13 @@ func TestRuneSet_Add(t *testing.T) {
 
 func TestRuneSet_AddRange(t *testing.T) {
 	t.Run("unit range", func(t *testing.T) {
-		var set RuneSet
+		var set runeset.RuneSet
 		set.AddRange('a', 'a')
 		assertEqual(t, set, "a-a")
 	})
 
 	t.Run("lowercase", func(t *testing.T) {
-		var set RuneSet
+		var set runeset.RuneSet
 		set.AddRange('a', 'z')
 		assertEqual(t, set, "a-z")
 	})
@@ -99,7 +100,7 @@ func TestRuneSet_AddRange(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		var set RuneSet
+		var set runeset.RuneSet
 		set.AddRange('c', 'e')
 		set.AddRange('h', 'j')
 		set.AddRange('k', 'k')
@@ -122,13 +123,13 @@ func TestRuneSet_AddRangeTable(t *testing.T) {
 		LatinOffset: 2,
 	}
 
-	var set RuneSet
+	var set runeset.RuneSet
 	set.AddRangeTable(table)
 	assertEqual(t, set, "A-Za-ad-dg-gj-j\U00010000-\U00010010\U00010100-\U00010100\U00010110-\U00010110")
 }
 
 func TestRuneSet_MergeAdjacents(t *testing.T) {
-	var set RuneSet
+	var set runeset.RuneSet
 	set.AddRange('a', 'c')
 	set.AddRange('g', 'i')
 	set.AddRange('j', 'j')
@@ -141,7 +142,9 @@ func TestRuneSet_MergeAdjacents(t *testing.T) {
 }
 
 func TestRuneSet_Picker(t *testing.T) {
-	var set RuneSet
+	expected := "abceghijklxyz"
+
+	var set runeset.RuneSet
 	set.AddRange('a', 'c')
 	set.AddRange('e', 'e')
 	set.AddRange('g', 'i')
@@ -149,7 +152,6 @@ func TestRuneSet_Picker(t *testing.T) {
 	set.AddRange('k', 'l')
 	set.AddRange('x', 'z')
 	set.MergeAdjacents()
-	expected := "abceghijklxyz"
 	picker := set.Picker()
 
 	if got := picker.Size(); got != int64(len(expected)) {
@@ -165,6 +167,6 @@ func TestRuneSet_Picker(t *testing.T) {
 	}
 
 	if r := picker.Random(); !strings.ContainsRune(expected, r) {
-		t.Errorf("Random() returned non-member rune %q", r)
+		t.Errorf("Random() returned a non-member rune %q", r)
 	}
 }

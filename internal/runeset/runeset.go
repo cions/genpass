@@ -1,4 +1,4 @@
-// Copyright (c) 2024 cions
+// Copyright (c) 2024-2025 cions
 // Licensed under the MIT License. See LICENSE for details.
 
 package runeset
@@ -13,7 +13,7 @@ import (
 )
 
 type Range struct {
-	Lo, Hi rune
+	lo, hi rune
 }
 
 type RuneSet struct {
@@ -27,10 +27,10 @@ type Picker struct {
 }
 
 func compare(a Range, b rune) int {
-	if a.Hi < b {
+	if a.hi < b {
 		return -1
 	}
-	if a.Lo > b {
+	if a.lo > b {
 		return 1
 	}
 	return 0
@@ -50,10 +50,10 @@ func (set *RuneSet) AddRange(lo, hi rune) {
 	i, found1 := slices.BinarySearchFunc(set.ranges, lo, compare)
 	j, found2 := slices.BinarySearchFunc(set.ranges, hi, compare)
 	if found1 {
-		lo = set.ranges[i].Lo
+		lo = set.ranges[i].lo
 	}
 	if found2 {
-		hi = set.ranges[j].Hi
+		hi = set.ranges[j].hi
 		j++
 	}
 	set.ranges = slices.Replace(set.ranges, i, j, Range{lo, hi})
@@ -85,8 +85,8 @@ func (set *RuneSet) MergeAdjacents() {
 	for j < len(set.ranges) {
 		cur := set.ranges[j]
 		j++
-		for j < len(set.ranges) && cur.Hi+1 == set.ranges[j].Lo {
-			cur.Hi = set.ranges[j].Hi
+		for j < len(set.ranges) && cur.hi+1 == set.ranges[j].lo {
+			cur.hi = set.ranges[j].hi
 			j++
 		}
 		set.ranges[i] = cur
@@ -99,7 +99,7 @@ func (set *RuneSet) Picker() *Picker {
 	var size int64
 	cumsizes := make([]int64, len(set.ranges))
 	for i, r := range set.ranges {
-		size += int64(r.Hi) - int64(r.Lo) + 1
+		size += int64(r.hi) - int64(r.lo) + 1
 		cumsizes[i] = size
 	}
 	return &Picker{set.ranges, cumsizes, size}
@@ -108,9 +108,9 @@ func (set *RuneSet) Picker() *Picker {
 func (set *RuneSet) String() string {
 	var b strings.Builder
 	for _, r := range set.ranges {
-		b.WriteRune(r.Lo)
+		b.WriteRune(r.lo)
 		b.WriteRune('-')
-		b.WriteRune(r.Hi)
+		b.WriteRune(r.hi)
 	}
 	return b.String()
 }
@@ -123,15 +123,15 @@ func (p *Picker) Get(i int64) rune {
 	if i < 0 || i >= p.size {
 		panic("runeset: out of bounds")
 	}
-	ri, found := slices.BinarySearch(p.cumSizes, i)
+	ridx, found := slices.BinarySearch(p.cumSizes, i)
 	if found {
-		ri++
+		ridx++
 	}
 	offset := i
-	if ri > 0 {
-		offset -= p.cumSizes[ri-1]
+	if ridx > 0 {
+		offset -= p.cumSizes[ridx-1]
 	}
-	return p.ranges[ri].Lo + rune(offset)
+	return p.ranges[ridx].lo + rune(offset)
 }
 
 func (p *Picker) Random() rune {

@@ -1,4 +1,4 @@
-// Copyright (c) 2024 cions
+// Copyright (c) 2024-2025 cions
 // Licensed under the MIT License. See LICENSE for details.
 
 package main
@@ -61,6 +61,8 @@ Syntax of CSET:
         \pN             Unicode character class (one-letter General Category)
         \p{NAME}        Unicode character class (General Category or Scripts)
 `
+
+var Gray = colorterm.Fg256Color(245)
 
 type Variant int
 
@@ -202,6 +204,7 @@ func (c *Command) getWordlist() ([]string, error) {
 	}
 
 	var wordlist []string
+
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
@@ -214,15 +217,17 @@ func (c *Command) getWordlist() ([]string, error) {
 	if len(wordlist) < 2 {
 		return nil, errors.New("wordlist must contain at least 2 words")
 	}
+
 	return wordlist, nil
 }
 
 func (c *Command) getNumOfElems(bitsPerElem float64, defaultBits uint) uint {
-	if c.Length != 0 {
+	switch {
+	case c.Length != 0:
 		return c.Length
-	} else if c.Bits != 0 {
+	case c.Bits != 0:
 		return uint(math.Ceil(float64(c.Bits) / bitsPerElem))
-	} else {
+	default:
 		return uint(math.Ceil(float64(defaultBits) / bitsPerElem))
 	}
 }
@@ -264,19 +269,19 @@ func run(args []string) error {
 		Wordlist: "eff-large",
 	}
 
-	_, err := options.Parse(c, args)
-	if errors.Is(err, options.ErrHelp) {
+	switch _, err := options.Parse(c, args); {
+	case errors.Is(err, options.ErrHelp):
 		usage := strings.ReplaceAll(USAGE, "$NAME", NAME)
 		fmt.Print(usage)
 		return nil
-	} else if errors.Is(err, options.ErrVersion) {
+	case errors.Is(err, options.ErrVersion):
 		version := VERSION
 		if bi, ok := debug.ReadBuildInfo(); ok {
 			version = bi.Main.Version
 		}
 		fmt.Printf("%v %v\n", NAME, version)
 		return nil
-	} else if err != nil {
+	case err != nil:
 		return err
 	}
 
@@ -288,7 +293,7 @@ func run(args []string) error {
 	for range c.Count {
 		fmt.Print(generator())
 		if c.ShowBits {
-			fmt.Printf("\t\t%v(%.2f bits)%v", colorterm.Fg256Color(245), bits, colorterm.Reset)
+			fmt.Printf("\t\t%v(%.2f bits)%v", Gray, bits, colorterm.Reset)
 		}
 		fmt.Println()
 	}

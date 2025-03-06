@@ -5,6 +5,9 @@ on: [ push, pull_request ]
 permissions:
   contents: write
 
+env:
+  APPNAME: "genpass"
+
 jobs:
   test:
     name: Test (${{ matrix.os }})
@@ -27,7 +30,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v5
       with:
-        go-version: "1.22"
+        go-version: "1.23"
     - name: Build genpass
       env:
         CGO_ENABLED: "0"
@@ -54,12 +57,11 @@ jobs:
       release-name: ${{ steps.create-release.outputs.release-name }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
     - id: create-release
       name: Create GitHub Release
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         RELEASE_NAME="${GITHUB_REF#refs/tags/}"
         gh release create --draft "${RELEASE_NAME}"
@@ -89,7 +91,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v5
       with:
-        go-version: "1.22"
+        go-version: "1.23"
     - id: build-release-asset
       name: Build release asset
       env:
@@ -97,19 +99,25 @@ jobs:
         GOOS: ${{ matrix.GOOS }}
         GOARCH: ${{ matrix.GOARCH }}
       run: |
-        go install -buildmode=pie -trimpath -ldflags "-s -w" "github.com/${GITHUB_REPOSITORY}/cmd/genpass@${GITHUB_REF#refs/tags/}"
+        GIT_TAG="${GITHUB_REF#refs/tags/}"
+        VERSION="${GIT_TAG#v}"
+        ASSETDIR="${APPNAME}-${GOOS}-${GOARCH}-${VERSION}"
 
-        ASSETDIR="genpass-${GOOS}-${GOARCH}-${GITHUB_REF#refs/tags/v}"
+        go install -buildmode=pie -trimpath -ldflags "-bindnow -s" \
+          "github.com/${GITHUB_REPOSITORY}/cmd/${APPNAME}@${GIT_TAG}"
+
+        case "${GOOS}/${GOARCH}" in
+          "$(go env GOHOSTOS)/$(go env GOHOSTARCH)")
+            GOBIN="$(go env GOPATH)/bin"
+            ;;
+          *)
+            GOBIN="$(go env GOPATH)/bin/${GOOS}_${GOARCH}"
+            ;;
+        esac
+
         mkdir "${ASSETDIR}"
         cp LICENSE README.md "${ASSETDIR}"
-
-        if [[ "${GOOS}/${GOARCH}" == "$(go env GOHOSTOS)/$(go env GOHOSTARCH)" ]]; then
-          GOBIN="$(go env GOPATH)/bin"
-        else
-          GOBIN="$(go env GOPATH)/bin/${GOOS}_${GOARCH}"
-        fi
-        GOEXE="$(go env GOEXE)"
-        cp "${GOBIN}/genpass${GOEXE}" "${ASSETDIR}"
+        cp "${GOBIN}/${APPNAME}$(go env GOEXE)" "${ASSETDIR}"
 
         case "${GOOS}" in
           windows)

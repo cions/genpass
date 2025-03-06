@@ -1,15 +1,17 @@
-// Copyright (c) 2024 cions
+// Copyright (c) 2024-2025 cions
 // Licensed under the MIT License. See LICENSE for details.
 
-package runeset
+package runeset_test
 
 import (
 	"testing"
 	"unicode"
+
+	"github.com/cions/genpass/internal/runeset"
 )
 
 func uniCharClass(table *unicode.RangeTable) string {
-	var set RuneSet
+	var set runeset.RuneSet
 	set.AddRangeTable(table)
 	set.MergeAdjacents()
 	return set.String()
@@ -62,7 +64,7 @@ func TestParse(t *testing.T) {
 		{`--\d-\L--`, "---0-9A-Z"},
 	}
 	for _, tt := range tests {
-		s, err := Parse(tt.input)
+		s, err := runeset.Parse(tt.input)
 		if err != nil {
 			t.Errorf("Parse(%q): unexpected error: %v", tt.input, err)
 		} else if got := s.String(); got != tt.want {
@@ -94,8 +96,8 @@ func TestParse_errors(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		if _, err := Parse(tt); err == nil {
-			t.Errorf("Parse(%q): expected non-nil error", tt)
+		if _, err := runeset.Parse(tt); err == nil {
+			t.Errorf("Parse(%q): expected a non-nil error", tt)
 		}
 	}
 }
