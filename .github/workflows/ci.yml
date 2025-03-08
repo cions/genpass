@@ -131,7 +131,8 @@ jobs:
         esac
     - name: Upload release asset
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: ${{ needs.create-release.outputs.release-name }}
         ASSET_NAME: ${{ steps.build-release-asset.outputs.asset-name }}
       run: gh release upload "${RELEASE_NAME}" "${ASSET_NAME}"
