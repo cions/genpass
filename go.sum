@@ -1,8 +1,8 @@
-github.com/cions/go-colorterm v0.3.0 h1:OTwvyi7eWFUCCvlh6kXpTNdFbi5ecwqHWA00XeXwPoQ=
-github.com/cions/go-colorterm v0.3.0/go.mod h1:witM8lStv1AqoRhCxyyJGcWlRWw2tn/GKF/gBk7S33Q=
-github.com/cions/go-options v0.2.1 h1:J2hGZQ32sbTxpLdZOaa0ZWkODF11Qkurm1XviU8vXNg=
-github.com/cions/go-options v0.2.1/go.mod h1:zs/5tnoAZnyXH9W/UH4i9an/boG4jC7MuJ/t0Tv89cI=
-golang.org/x/sys v0.35.0 h1:vz1N37gP5bs89s7He8XuIYXpyY0+QlsKmzipCbUtyxI=
-golang.org/x/sys v0.35.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
-golang.org/x/term v0.34.0 h1:O/2T7POpk0ZZ7MAzMeWFSg6S5IpWd/RXDlM9hgM3DR4=
-golang.org/x/term v0.34.0/go.mod h1:5jC53AEywhIVebHgPVeg0mj8OD3VO9OzclacVrqpaAw=
+github.com/cions/go-colorterm v0.3.1 h1:fT3mF844qVscJcO7A0IcHxWgDXtyS7aWpJBlLc1r3HA=
+github.com/cions/go-colorterm v0.3.1/go.mod h1:AYbpfQhxfQ7cMoOkVHTBjiwna/EobM/MAT796O3p4qo=
+github.com/cions/go-options v0.2.2 h1:+I2Tj4D0qn5NivUaujKvppHEziGXUtfzdV6lz0q7hS8=
+github.com/cions/go-options v0.2.2/go.mod h1:GpJwGM3siDMOrb/fkqtEU037EvTsJLs8LqDNWXeE2Xs=
+golang.org/x/sys v0.42.0 h1:omrd2nAlyT5ESRdCLYdm3+fMfNFE/+Rf4bDIQImRJeo=
+golang.org/x/sys v0.42.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
+golang.org/x/term v0.41.0 h1:QCgPso/Q3RTJx2Th4bDLqML4W6iJiaXFq2/ftQF13YU=
+golang.org/x/term v0.41.0/go.mod h1:3pfBgksrReYfZ5lvYM0kSO0LIkAl4Yl2bXOkKP7Ec2A=
