@@ -4,7 +4,6 @@
 [![LICENSE](https://img.shields.io/github/license/cions/genpass)](https://github.com/cions/genpass/blob/master/LICENSE)
 [![CI](https://github.com/cions/genpass/actions/workflows/ci.yml/badge.svg)](https://github.com/cions/genpass/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/cions/genpass.svg)](https://pkg.go.dev/github.com/cions/genpass)
-[![Go Report Card](https://goreportcard.com/badge/github.com/cions/genpass)](https://goreportcard.com/report/github.com/cions/genpass)
 
 Generates secure random passphrases/password/hex/base64 strings.
 

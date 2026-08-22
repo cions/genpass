@@ -1,5 +1,5 @@
-// Copyright (c) 2024-2026 cions
-// Licensed under the MIT License. See LICENSE for details.
+// Copyright (c) 2024-2026 cions <cions@tuta.com>
+// SPDX-License-Identifier: MIT
 
 package main
 
@@ -250,11 +250,11 @@ func (c *Command) getGenerator() (Generator, float64, error) {
 		nchars := c.getNumOfElems(bitsPerElem, 80)
 		return newPasswordGenerator(c.Picker, nchars), bitsPerElem * float64(nchars), nil
 	case Hexadecimal:
-		bitsPerElem := float64(4)
+		bitsPerElem := 4.0
 		nchars := c.getNumOfElems(bitsPerElem, 128)
 		return newHexGenerator(nchars), bitsPerElem * float64(nchars), nil
 	case Base64:
-		bitsPerElem := float64(6)
+		bitsPerElem := 6.0
 		nchars := c.getNumOfElems(bitsPerElem, 128)
 		return newBase64Generator(nchars), bitsPerElem * float64(nchars), nil
 	default:
